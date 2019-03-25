@@ -1,0 +1,4 @@
+# Actually, enumerations of editor trash should be in your $HOME/.config/git/ignore
+*~
+t99.*
+j99.*
