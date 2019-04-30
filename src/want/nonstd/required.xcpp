@@ -1,0 +1,18 @@
+// This is -*- c++ -*- nearly C++2a with Modules TS but in the S.C.O.L.D. stylings that are so popular these days.
+// Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+#divert <fpp>
+#import nonstd.required
+namespace want::nonstd::required {
+  using namespace ::nonstd::required; // cascade the namespaces
+}
+#endiv
+#divert <cpp>
+// This is test code
+#import nonstd.required.Integer
+namespace want::nonstd {
+  // are the namspaces cascaded?
+  static_assert(::nonstd::required::Integer<int>);
+  static_assert(::want::nonstd::required::Integer<int>);
+  static_assert(required::Integer<int>);
+}
+#endiv

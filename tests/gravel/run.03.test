@@ -1,0 +1,13 @@
+#!/bin/sh
+source ${0%/*}/rigging.sh || exit 70
+(
+    # This is a boilerplate duplicate of run.01; unclear why this test needs to be here.
+    #
+    #   This is expected to fail (XFAIL) because
+    #   (1) there is no hyperledger fabric installed
+    #   (2) else you do not have permissions
+    #
+    $exe /var/hyperledger/fabric/production
+) >& $output
+difference $golden $output
+successful

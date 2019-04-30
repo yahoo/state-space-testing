@@ -1,0 +1,1 @@
+lt-pcd: error, the location "/dev/null" does not appear to contain a Hyperledger Fabric world-state database (LevelDB)

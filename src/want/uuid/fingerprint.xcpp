@@ -1,0 +1,29 @@
+// This is -*- c++ -*- nearly C++2a with Modules TS but in the S.C.O.L.D. stylings that are so popular these days.
+// Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+#divert <hpp>
+#import rabinpoly.Fingerprint
+#forward uuid.Container
+namespace want::uuid {
+  //
+  // Compute the rabin polynomial hash of a UUID.
+  // [[FIXTHIS]] Arguably, this should be part of module-uuid, or less obviously, module-rabinpoly
+  //
+  // Usage:
+  //
+  //   auto uu = uuid::Container{...somehow...};
+  //   auto fp = uuid::fingerprint(uu);
+  //
+  inline auto fingerprint(::uuid::Container const &) -> rabinpoly::Fingerprint;
+}
+namespace uuid {
+  using want::uuid::fingerprint; // so ADL will find it
+}
+#endiv
+#divert <ipp>
+#import uuid.Container
+#import rabinpoly.generate
+auto want::uuid::fingerprint(::uuid::Container const &subject) -> rabinpoly::Fingerprint {
+  constexpr auto N = sizeof (subject.value)/sizeof (subject.value[0]);
+  return rabinpoly::generate(&subject.value[0], &subject.value[N]);
+}
+#endiv

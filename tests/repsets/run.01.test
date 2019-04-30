@@ -1,0 +1,10 @@
+#!/bin/sh
+source ${0%/*}/rigging.sh || exit 70
+(
+    # this is expected to fail (XFAIL) because
+    # (1) there is no hyperledger fabric installed
+    # (2) else you do not have permissions
+    $exe /var/hyperledger/fabric/production
+) >& $output
+difference $golden $output
+successful

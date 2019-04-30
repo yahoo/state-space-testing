@@ -1,0 +1,14 @@
+usage: lt-pcd [...options...] database-location
+
+The database location is probably /var/hyperledger/fabric/production
+
+within that area, the world-state database wil be discovered
+
+General Options:
+  --usage, --help                       show this message
+  --version                             exhibit the version and quit
+  --warnings, --warning                 warnings mode
+  --quiet                               Shut. Up.  is independent of --verbose
+  --verbose                             verbose mode
+  --dryrun, --dry-run                   dry run, do not do anything
+  --debug                               debug mode (you should not need this)

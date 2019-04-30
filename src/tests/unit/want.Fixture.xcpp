@@ -1,0 +1,87 @@
+// This is -*- c++ -*- nearly C++2a with Modules TS but in the S.C.O.L.D. stylings that are so popular these days.
+// Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+#divert <fpp>
+namespace tests::unit::want { class Fixture; }
+#endiv
+#divert <hpp>
+#import cppunit.Test
+#import cppunit.test.Fixture
+class tests::unit::want::Fixture : public cppunit::test::Fixture {
+public:
+  template<typename INTEGER> auto test_nonstd_range_integer() -> void;
+  auto test_uuid_fingerprint() -> void;
+  static auto suite() -> cppunit::Test *;
+};
+#endiv
+#divert <tpp>
+#import want.nonstd.range.integer
+template<typename INTEGER> auto tests::unit::want::Fixture::test_nonstd_range_integer() -> void {
+  auto first = INTEGER(0);
+  auto last = INTEGER(10);
+  auto count = 0u;
+  for (auto item : ::want::nonstd::range::integer(first, last)) {
+    item = item; // shutup the warning
+    ++count;
+  }
+  // these are smallish counts anyway, but INTEGER could be signed or unsigned
+  unsigned const actual_size = count;
+  unsigned const expected_size = last;
+  CPPUNIT_ASSERT(expected_size == actual_size);
+}
+#endiv
+#divert <cpp>
+#import uuid.Container
+#import uuid.clear
+#import uuid.generate.random
+#import want.uuid.fingerprint
+auto tests::unit::want::Fixture::test_uuid_fingerprint() -> void {
+  using Subject = ::uuid::Container;
+  auto specimen0 = Subject{};
+  auto subject0 = fingerprint(specimen0);
+  auto specimen1 = ::uuid::generate::random();
+  auto subject1 = fingerprint(specimen1);
+  CPPUNIT_ASSERT(subject0 != subject1);
+}
+#import std.int8_t
+#import std.uint8_t
+#import std.int16_t
+#import std.uint16_t
+#import std.int32_t
+#import std.uint32_t
+#import std.int64_t
+#import std.uint64_t
+#import unit.rigging.suite.Stream
+#import unit.rigging.suite.call
+#import unit.rigging.suite.add
+auto tests::unit::want::Fixture::suite() -> cppunit::Test * {
+  using namespace ::unit::rigging::suite;
+  Stream series("want");
+  {
+    Stream non("nonstd");
+    {
+      Stream ran("range");
+      {
+        Stream inte("integer");
+        inte << call("int8_t", &Fixture::test_nonstd_range_integer<std::int8_t>)
+             << call("uint8_t", &Fixture::test_nonstd_range_integer<std::uint8_t>)
+             << call("int16_t", &Fixture::test_nonstd_range_integer<std::int16_t>)
+             << call("uint16_t", &Fixture::test_nonstd_range_integer<std::uint16_t>)
+             << call("int32_t", &Fixture::test_nonstd_range_integer<std::int32_t>)
+             << call("uint32_t", &Fixture::test_nonstd_range_integer<std::uint32_t>)
+             << call("int64_t", &Fixture::test_nonstd_range_integer<std::int64_t>)
+             << call("uint64_t", &Fixture::test_nonstd_range_integer<std::uint64_t>)
+          ;
+        ran << add(inte.release());
+      }
+      non << add(ran.release());
+    }
+    series << add(non.release());
+  } {
+    Stream uui("uuid");
+    uui << call("fingerprint", &Fixture::test_uuid_fingerprint);
+    ;
+    series << add(uui.release());
+  }
+  return series.release();
+}
+#endiv

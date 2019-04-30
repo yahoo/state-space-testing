@@ -1,0 +1,8 @@
+#!/bin/sh
+source ${0%/*}/rigging.sh || exit 70
+(
+    # see option.help.test nearby for the --help variant
+    $exe --dry-run --usage
+) >& $output
+difference $golden $output
+successful

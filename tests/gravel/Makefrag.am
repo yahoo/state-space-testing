@@ -1,0 +1,24 @@
+tests_gravel_XFAIL_TESTS = \
+  tests/gravel/run.01.test \
+  tests/gravel/run.02.test \
+  tests/gravel/run.03.test \
+  $(end)
+tests_gravel_TESTS = \
+  tests/gravel/dryrun.usage.test \
+  tests/gravel/dryrun.help.test \
+  tests/gravel/dryrun.h.test \
+  \
+  tests/gravel/dryrun.version.test \
+  tests/gravel/dryrun.V.test \
+  \
+  tests/gravel/run.empty.test \
+  tests/gravel/run.usage.test \
+  tests/gravel/run.version.test \
+  \
+  $(tests_gravel_XFAIL_TESTS) \
+  $(end)
+
+tests_gravel_TESTS_DECLARED = $(tests_gravel_TESTS)
+tests_gravel_TESTS_OBSERVED = $(wildcard tests/gravel/*.test)
+tests_gravel_TESTS_ORPHANED = $(filter-out $(tests_gravel_TESTS_DECLARED), $(tests_gravel_TESTS_OBSERVED))
+$(if $(tests_gravel_TESTS_ORPHANED), $(error orphaned tests $(tests_gravel_TESTS_ORPHANED)))

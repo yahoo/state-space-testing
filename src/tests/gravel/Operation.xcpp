@@ -1,0 +1,32 @@
+// This is -*- c++ -*- nearly C++2a with Modules TS but in the S.C.O.L.D. stylings that are so popular these days.
+// Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+#divert <fpp>
+namespace tests::gravel {
+  //
+  // The Operation
+  // With a (compile-time) choice of API and Operator
+  //
+  // Usage:
+  //
+  //   Operation::Context ctx{...somehow...};
+  //   ctx.endpoints = {{"peer1.org1.example", 9999u}, {"peer2.org2.example", 9999}, ... };
+  //   ctx.channelID = "microphone";
+  //   ctx.name = "mycc";
+  //
+  //   Operation op{ctx};
+  //   auto got = get(op, key); ................. ADL will find these.
+  //   auto sat = set(op, key, record);
+  //   auto past = history(op, key);
+  //
+  class Operation;
+}
+#endiv
+#divert <hpp>
+#import iab.privacychain.Operation
+#import iab.privacychain.api.v1
+class tests::gravel::Operation : public iab::privacychain::api::Operation<iab::privacychain::api::INVOKE> {
+  using ancestor = iab::privacychain::api::Operation<iab::privacychain::api::INVOKE>;
+public:
+  using ancestor::Operation;
+};
+#endiv

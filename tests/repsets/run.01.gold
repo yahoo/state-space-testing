@@ -1,0 +1,1 @@
+lt-pcd: error, the location "/var/hyperledger/fabric/production" does not appear to contain a Hyperledger Fabric world-state database (LevelDB)

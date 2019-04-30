@@ -1,0 +1,15 @@
+#!/bin/sh
+source ${0%/*}/rigging.sh || exit 70
+expected_ecode=${EX_CONFIG:-70}
+trap '' ERR
+(
+    # no options and no words (expect failure)
+    $exe
+) >& $output
+actual_ecode=$?
+if [[ $expected_ecode != $actual_ecode ]]; then
+    failure
+fi
+trap failure ERR
+difference $golden $output
+successful

@@ -1,0 +1,10 @@
+#!/bin/sh
+source ${0%/*}/rigging.sh || exit 70
+(
+    # this is expected to fail (XFAIL) because
+    # (1) /dev/null is not a database
+    # (2) see Item (1)
+    $exe /dev/null
+) >& $output
+difference $golden $output
+successful

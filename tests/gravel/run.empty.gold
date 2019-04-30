@@ -1,0 +1,6 @@
+lt-full-of-gravel: error, the record count value was not supplied at all (use '--usage' to see the options)
+lt-full-of-gravel: error, the maximum record size value was not supplied at all (use '--usage' to see the options)
+lt-full-of-gravel: error, there is no channelID, perhaps --channel NAME is missing?
+lt-full-of-gravel: error, there is no chaincode name, perhaps --chaincode NAME is missing?
+lt-full-of-gravel: error, there are no peers to contact, perhaps --peers ENDPOINTS is missing?
+lt-full-of-gravel: notice, there were configuration errors

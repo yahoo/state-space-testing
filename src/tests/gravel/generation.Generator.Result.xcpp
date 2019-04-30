@@ -1,0 +1,39 @@
+// This is -*- c++ -*- nearly C++2a with Modules TS but in the S.C.O.L.D. stylings that are so popular these days.
+// Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+#divert <fpp>
+#include <hpp/tests.gravel.generation.Generator>
+#endiv
+#divert <hpp>
+#import std.tuple
+#import uuid.Container
+#import rabinpoly.Fingerprint
+namespace tests::gravel::generation {
+  // Need a full type (a class), not a type alias so that ADL will work find these.
+  inline auto identifier(Generator::Result const &) -> ::uuid::Container const &;
+  inline auto identifier(Generator::Result &) -> ::uuid::Container &;
+  inline auto identifier(Generator::Result &&) -> ::uuid::Container;
+  inline auto fingerprint(Generator::Result const &) -> rabinpoly::Fingerprint;
+  inline auto consent(Generator::Result const &) -> std::string const &;
+  inline auto consent(Generator::Result &) -> std::string &;
+  inline auto consent(Generator::Result &&) -> std::string;
+}
+class tests::gravel::generation::Generator::Result : public std::tuple<::uuid::Container, rabinpoly::Fingerprint, std::string> {
+  using ancestor = std::tuple<::uuid::Container, rabinpoly::Fingerprint, std::string>;
+public:
+  Result() = default;
+  using ancestor::tuple;
+};
+#endiv
+#divert <ipp>
+#import std.get
+#import std.forward
+namespace tests::gravel {
+  auto generation::identifier(Generator::Result const &r) -> ::uuid::Container const & { return std::get<0>(r); }
+  auto generation::identifier(Generator::Result &r) -> ::uuid::Container &             { return std::get<0>(r); }
+  auto generation::identifier(Generator::Result &&r) -> ::uuid::Container              { return std::get<0>(std::forward<Generator::Result>(r)); }
+  auto generation::fingerprint(Generator::Result const &r) -> rabinpoly::Fingerprint   { return std::get<1>(r); }
+  auto generation::consent(Generator::Result const &r) -> std::string const &          { return std::get<2>(r); }
+  auto generation::consent(Generator::Result &r) -> std::string &                      { return std::get<2>(r); }
+  auto generation::consent(Generator::Result &&r) -> std::string                       { return std::get<2>(std::forward<Generator::Result>(r)); }
+}
+#endiv

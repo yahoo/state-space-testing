@@ -1,0 +1,23 @@
+# Not so obviously, this is a GNU -*- Makefile -*- which is included by automake, not by GNU make
+# Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+lib_libwant_la = lib/libwant.la
+lib_libwant_la_LIBADD = -luuid-module -lrabinpoly-module
+lib_libwant_la_MODULES = $(call TF_SOURCEStoMODULES, $(lib_libwant_la_SOURCES))
+lib_libwant_la_SOURCES = \
+  obj/src/want/namespace.cpp \
+  obj/src/want/nonstd/namespace.cpp \
+  obj/src/want/nonstd/required.cpp \
+  obj/src/want/nonstd/range/namespace.cpp \
+  obj/src/want/nonstd/range/integer.cpp \
+  obj/src/want/nonstd/range/detail.Integer.cpp \
+  obj/src/want/nonstd/range/detail.Integer.Iterator.cpp \
+  \
+  obj/src/want/uuid/namespace.cpp \
+  obj/src/want/uuid/fingerprint.cpp \
+  $(end)
+$(scold_cxxdir)/want/dependencies.mk:
+	$(TF_V_DC) $(call TF_DISAGGREGATE, $(lib_libwant_la_SOURCES))
+	$(TF_V_DONE) test -e $@
+include $(scold_cxxdir)/want/dependencies.mk
+clean-dependencies::
+	rm -f $(scold_cxxdir)/want/dependencies.mk

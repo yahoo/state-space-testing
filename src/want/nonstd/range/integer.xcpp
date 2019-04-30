@@ -1,0 +1,32 @@
+// This is -*- c++ -*- nearly C++2a with Modules TS but in the S.C.O.L.D. stylings that are so popular these days.
+// Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+#divert <hpp>
+#import want.nonstd.range.detail.Integer
+#import nonstd.required.Integer
+namespace want::nonstd::range {
+  //
+  // A range object among [low, high)
+  // for use in range for loops
+  //
+  // Specification:
+  //   conforms to boost::irange<INTEGER>(first, last)
+  //   but does not have the stride.
+  //
+  // Usage:
+  //
+  //   auto count{0u};
+  //   for (auto position : range(0, 10}) {
+  //      ++count;
+  //   }
+  //   10 == count
+  //
+  template<required::Integer INTEGER> inline auto integer(INTEGER first, INTEGER last) -> detail::Integer<INTEGER>;
+}
+#endiv
+#divert <ipp>
+namespace want::nonstd {
+  template<required::Integer INTEGER> auto range::integer(INTEGER first, INTEGER last) -> detail::Integer<INTEGER> {
+    return detail::Integer<INTEGER>{first, last};
+  }
+}
+#endiv

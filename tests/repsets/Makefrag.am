@@ -1,0 +1,24 @@
+tests_repsets_XFAIL_TESTS = \
+  tests/repsets/dryrun.usage.test \
+  tests/repsets/dryrun.help.test \
+  tests/repsets/dryrun.h.test \
+  \
+  tests/repsets/dryrun.version.test \
+  tests/repsets/dryrun.V.test \
+  \
+  tests/repsets/run.empty.test \
+  tests/repsets/run.usage.test \
+  tests/repsets/run.version.test \
+  \
+  tests/repsets/run.01.test \
+  tests/repsets/run.02.test \
+  tests/repsets/run.03.test \
+  $(end)
+tests_repsets_TESTS = \
+  $(tests_repsets_XFAIL_TESTS) \
+  $(end)
+
+tests_repsets_TESTS_DECLARED = $(tests_repsets_TESTS)
+tests_repsets_TESTS_OBSERVED = $(wildcard tests/repsets/*.test)
+tests_repsets_TESTS_ORPHANED = $(filter-out $(tests_repsets_TESTS_DECLARED), $(tests_repsets_TESTS_OBSERVED))
+$(if $(tests_repsets_TESTS_ORPHANED), $(error orphaned tests $(tests_repsets_TESTS_ORPHANED)))

@@ -1,0 +1,41 @@
+// This is -*- c++ -*- nearly C++2a with Modules TS but in the S.C.O.L.D. stylings that are so popular these days.
+// Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+#divert <fpp>
+namespace tests::gravel {
+  //
+  // The full-of-gravel configuration,
+  // is the "standard configuration" for a peer-contacting application.
+  //
+  // Endpoints
+  // Channel (Name,ID)
+  // Chaincode (Name)
+  //
+  // Usage:
+  //
+  //   ...you know... (but see sst::environment::Configuration)
+  //   Program program{...somehow...};
+  //   Configuration cfg{program};
+  //   error(cfg) << "bad!\n"
+  //   notice(cfg) << "done!\n"
+  //   process(cfg.context, size, count);
+  //
+  class Configuration;
+}
+#endiv
+#divert <hpp>
+#import std.optional
+#import sst.environment.Configuration
+class tests::gravel::Configuration : public sst::environment::Configuration {
+  using ancestor = sst::environment::Configuration;
+public:
+  inline explicit Configuration(Program);
+  std::optional<Count> record_count;
+  std::optional<Size> maximum_record_size;
+};
+#endiv
+#divert <ipp>
+#import std.move
+tests::gravel::Configuration:: Configuration(Program program)
+  : ancestor{std::move(program)}
+{ }
+#endiv

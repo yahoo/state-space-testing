@@ -1,0 +1,30 @@
+// This is -*- c++ -*- nearly C++2a with Modules TS but in the S.C.O.L.D. stylings that are so popular these days.
+// Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+#divert <hpp>
+#import std.underlying_type
+#import tests.gravel.required.Integral
+#import want.nonstd.range
+#import want.nonstd.range.detail.Integer
+namespace tests::gravel::range {
+  using namespace want::nonstd::range; // cascade the namespaces, for convenience
+  //
+  // A range-count on the tagged integers
+  //
+  // Usage:
+  //
+  //   auto iteration_bounds = Count{...somehow...};
+  //   for (auto position : range::count(Count{0}, iteration_bounds)) {
+  //     ...something...
+  //   }
+  //
+  template<required::Integral INTEGRAL> inline auto count(INTEGRAL first, INTEGRAL last) -> detail::Integer<typename std::underlying_type<INTEGRAL>::type>;
+}
+#endiv
+#divert <ipp>
+namespace tests::gravel::range {
+  template<required::Integral INTEGRAL> auto range::count(INTEGRAL first, INTEGRAL last) -> detail::Integer<typename std::underlying_type<INTEGRAL>::type> {
+    using Underlying = typename std::underlying_type<INTEGRAL>::type;
+    return detail::Integer<Underlying>{Underlying(first), Underlying(last)};
+  }
+}
+#endiv

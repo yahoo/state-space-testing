@@ -1,0 +1,198 @@
+// This is -*- c++ -*- nearly C++2a with Modules TS but in the S.C.O.L.D. stylings that are so popular these days.
+// Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+#divert <hpp>
+#import c.argv
+#import sys.exits.Code
+#import std.ostream
+#import std.intmax_t
+#import std.optional
+#import tests.gravel.options
+#import tests.gravel.Configuration
+namespace tests::gravel::main {
+  auto remain(c::argv) -> sys::exits::Code;
+  auto usage(Configuration const &, std::ostream &, sys::exits::Code) -> sys::exits::Code;
+  auto version(Configuration const &, std::ostream &) -> sys::exits::Code;
+}
+#endiv
+#divert <cpp>
+auto main(int cc, char *vv[]) -> int {
+  return tests::gravel::main::remain(c::argv(cc, vv));
+}
+#import c.rest
+#import hyperledger.fabric.tls.from_string.Endpoints
+#import nonstd.exception.Quitting
+#import std.cout
+#import std.cerr
+#import std.tie
+#import sys.exits.constants
+#import tests.gravel.perform
+#import sst.environment.fix
+namespace tests::gravel {
+  auto main::remain(c::argv av) -> sys::exits::Code try {
+    namespace fix = sst::environment::fix;
+    Configuration::Program NAME{av.front()};
+    auto warnings_seen = false;
+    auto errors_seen = false;
+    Configuration cfg{NAME};
+    auto vv = c::rest(av);
+    for ( ; vv.size(); vv=c::rest(vv)) {
+      std::string option = vv.front();
+      if (option.empty()) {
+        error(cfg) << "empty option is inappropriate\n";
+        errors_seen = true;
+      } else if ("--"s == option) {
+        vv = c::rest(vv);
+        break;
+      } else if ('-' != option.front()) {
+        break;
+      } else if ("--usage"s == option || "--help"s == option || "-h"s == option) {
+        return usage(cfg, std::cout, sys::exits::OK);
+      } else if ("--version"s == option || "-V" == option) {
+        return version(cfg, std::cout);
+      } else if (auto const tag="--record-count="s; 0 == option.find(tag)) {
+        std::tie(cfg.record_count, warnings_seen, errors_seen) = options::get_count(cfg, option.substr(tag.size()), cfg.record_count, "record count"sv);
+      } else if (auto const tag="--maximum-size="s; 0 == option.find(tag)) {
+        std::tie(cfg.maximum_record_size, warnings_seen, errors_seen) = options::get_count(cfg, option.substr(tag.size()), cfg.maximum_record_size, "maximum record size"sv);
+      } else if ("--dryrun"s == option || "--dry-run"s == option || "-y"s == option) {
+        cfg.dry_run_mode = true;
+      } else if ("--warnings"s == option || "--warning"s == option || "-w"s == option) {
+        cfg.warning_mode = true;
+      } else if ("--quiet"s == option || "-q"s == option) {
+        cfg.quiet_mode = true;
+      } else if ("--verbose"s == option || "-v"s == option) {
+        cfg.verbose_mode = true;
+      } else if ("--debug"s == option || "-d"s == option) {
+        cfg.debug_mode = true;
+      } else if ("--channel"s == option || "--channelID"s == option || "-c"s == option) {
+        // --channel is our invention; Hyperledger Fabric v1.4 requires --channelID
+        // -c is our invention, Hyperledger Fabric v1.4 uses -c for --ctor" which we subsume in the remaining args
+        if (vv.size() < 2) {
+          error(cfg) << "" << /*format::q*/ option << " requires a value following it\n";
+          errors_seen = true;
+          break;
+        }
+        vv = c::rest(vv);
+        cfg.context.channelID = vv.front(); // check for invalid channel names later
+        verbose(cfg) << "channel " << cfg.context.channelID << '\n';
+      } else if ("--chaincode"s == option || "--name"s == option || "-n"s == option) {
+        // --chaincode is our invention; Hyperledger Fabric v1.4 requires --name
+        if (vv.size() < 2) {
+          error(cfg) << "" << /*format::q*/ option << " requires a value following it\n";
+          errors_seen = true;
+          break;
+        }
+        vv = c::rest(vv);
+        cfg.context.name = vv.front(); // check for invalid chaincode names later
+        verbose(cfg) << "chaincode " << cfg.context.name << '\n';
+      } else if ("--peer"s == option || "--peers"s == option || "--peerAddresses"s == option) {
+        // --peer, --peers is our invention; Hyperledger Fabric v1.4 requires --peerAddresses (no short option is documented)
+        if (vv.size() < 2) {
+          error(cfg) << "" << /*format::q*/ option << " requires a value following it\n";
+          errors_seen = true;
+          break;
+        }
+        vv = c::rest(vv);
+        namespace tls = hyperledger::fabric::tls;
+        auto es = tls::from_string<tls::Endpoints>(vv.front()); // this does some parsing of the endpoint-commalist
+        if (!ok(es)) {
+          error(cfg) << "" << /*format::q*/ option << " invalid peer endpoints because " << error_code(es).message() << '\n';
+          break;
+        }
+        cfg.context.peers.endpoints = value(es);
+        verbose(cfg) << "peers endpoints " << format(cfg.context.peers.endpoints) << '\n';
+      } else if ("--msp"s == option) {
+        // --msp is our invention; Hyperledger Fabric v1.4 requires the use of the CORE_PEER_MSPCONFIGPATH environment variable
+        if (vv.size() < 2) {
+          error(cfg) << "" << /*format::q*/ option << " requires a value following it\n";
+          errors_seen = true;
+          break;
+        }
+        vv = c::rest(vv);
+        auto msppath = vv.front();
+        fix::setMSP(cfg, msppath, fix::Override::OVERRIDE);
+        verbose(cfg) << "msp " << msppath << '\n';
+      } else {
+        if (std::string::npos != option.find('=')) {
+          notice(cfg) << "the PrivacyChain and Hyperledger Fabric options do not use '=' in options\n";
+          notice(cfg) << "probably you need to use a space and the value in the subsequent argument\n";
+        }
+        error(cfg) << "invalid option " << /*format::q*/ option << " (use '--usage' to see the options)\n";
+        errors_seen = true;
+      }
+    }
+    if (1 < vv.size()) {
+      error(cfg) << "extra words after the options, only a record-count is allowed\n";
+      errors_seen = true;
+    } else if (1 == vv.size()) {
+      std::string const option = vv.front();
+      std::tie(cfg.record_count, warnings_seen, errors_seen) = options::get_count(cfg, option, cfg.record_count, "record count"sv);
+    }
+    std::tie(warnings_seen, errors_seen) = options::validate_count(cfg, cfg.record_count, "record count"sv);
+    std::tie(warnings_seen, errors_seen) = options::validate_count(cfg, cfg.maximum_record_size, "maximum record size"sv);
+    if (cfg.context.channelID.empty()) {
+      error(cfg) << "there is no channelID, perhaps --channel NAME is missing?\n";
+      errors_seen = true;
+    }
+    if (cfg.context.name.empty()) {
+      error(cfg) << "there is no chaincode name, perhaps --chaincode NAME is missing?\n";
+      errors_seen = true;
+    }
+    if (cfg.context.peers.endpoints.empty()) {
+      error(cfg) << "there are no peers to contact, perhaps --peers ENDPOINTS is missing?\n";
+      errors_seen = true;
+    }
+    if (warnings_seen) {
+      verbose(cfg) << "there were warnings\n";
+    }
+    if (errors_seen) {
+      notice(cfg) << "there were configuration errors\n";
+      return sys::exits::CONFIG;
+    }
+    perform(cfg, cfg.context, *cfg.maximum_record_size, *cfg.record_count);
+    return sys::exits::OK;
+  } catch (nonstd::exception::Quitting const &e) {
+    e.stream() << e << '\n';
+    return e.code();
+  } catch (...) {
+    return sys::exits::SOFTWARE;
+  }
+  auto main::usage(Configuration const &cfg, std::ostream &outbound, sys::exits::Code code) -> sys::exits::Code {
+#warning [[FIXTHIS]] ... What is the maximum size of a TCF cookie-header-thingy?  What should it be?
+    auto maximum_maximum_record_size = 65535u;
+  auto const default_admin_msp = "/etc/hyperledger/fabric/admin/msp"sv;  // [[FIXTHIS]] put well-known constants like this in namspace defaults
+    outbound << "usage: " << cfg.NAME << " [...options...] [--] record-count\n"
+             << ("\n"
+                 "The <record-count> is the number of records to add to the database\n"
+                 "... the generated records are filled with random payloads and have random sizes 0..maximum\n"
+                 "\n"
+                 "Testing Options:\n"
+                 "  --maximum-size=NUMBER               the maximum record size (maximum is ") << maximum_maximum_record_size << '\n'
+             << ("  --record-count=NUMBER               the count of the records to add (there is no maximum)\n"
+                 "                                      either the --record-count=NUMBER option or the <record-count> value may appear\n"
+                 "\n"
+                 "Hyperledger (Fabric) Options:\n"
+                 "  --channel=<name>                      a channel name\n"
+                 "  --chaincode=<name>                    a chaincode name\n"
+                 "  --peers=<endpoints>                   a comma-separated list of peer endpoints\n"
+                 "                                        <endpoint> is a FQDN or FQDN:PORT or the address variant of such\n"
+                 "  --msp=.../admin/msp                   path to the MSP certificate directory\n"
+                 "                                        default: ") << default_admin_msp << '\n'
+             << ("\n"
+                 "General Options:\n"
+                 "  --usage, --help                       show this message\n"
+                 "  --version                             exhibit the version and quit\n"
+                 "  --warnings, --warning                 warnings mode\n"
+                 "  --quiet                               Shut. Up.  is independent of --verbose\n"
+                 "  --verbose                             verbose mode\n"
+                 "  --dryrun, --dry-run                   dry run, do not do anything\n"
+                 "  --debug                               debug mode (you should not need this)\n")
+                 ;
+    return sys::exits::OK;
+  }
+}
+#include "config.h" // PACKAGE_VERSION as a #define (yuk!)
+auto tests::gravel::main::version(Configuration const &cfg, std::ostream &outbound) -> sys::exits::Code {
+  outbound << cfg.NAME << ": version " << PACKAGE_VERSION << '\n';
+  return sys::exits::OK;
+}
+#endiv

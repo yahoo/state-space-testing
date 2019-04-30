@@ -1,11 +1,12 @@
 # State Space, Testing
 
-This repository contains the end-to-end, reliability and performance test cases for the State Space implementation of the IAB PrivacyChain Reference Design.   These test cases relate to the State Space services and database manager.  
+This repository contains the end-to-end, reliability and performance test cases for the State Space implementation of the IAB PrivacyChain Reference Design.   These test cases relate to the State Space services and database manager.
 
 ![banner](logo.png)
 
-More detailed information can be found at the following locations
-about the scope and purpose of the State Space implementation of the IAB PrivacyChain Reference Design.
+More detailed information
+about the scope and purpose of the State Space implementation of the IAB PrivacyChain Reference Design
+can be found at the following locations:
 * [State Space](https://github.com/yahoo/statespace)
 * [IAB PrivacyChain](https://github.com/InteractiveAdvertisingBureau/PrivacyChain/blob/master/README.md) Reference Design.
 
@@ -43,20 +44,30 @@ This will create a directory called `statespace-testing` and download the conten
 
 ## Configuration
 
-The following commands will configure the respository.  Individual test scenarios may have further configuration to operate them.
+You can configure and build the test drivers with the following recipe:
 
-```
+``` bash
 ./buildconf &&
-./configure
+./configure &&
+make check &&
+make install &&
+echo OK DONE
 ```
 
 ## Usage
 
-Each individual test case will have a statement of purpose and how to run it.
+Each individual test case will have a statement of purpose and instructions describing how to run it.
+
+## Contents
+
+Again, a reminder: these are stress tests which populate the database on their own terms.  They should be used wisely and on on test databases (test channels) only. They should not be applied to the network.
+
+* [full-of-gravel](https://github.com/yahoo/statespace-testing/blob/master/tests/full-of-gravel) fills the database with random data.
+* [reps-and-sets](https://github.com/yahoo/statespace-testing/blob/master/tests/reps-and-sets) exercises CRUD in the database with its own data set.
 
 ## Security
 
-This project doesn't have any security concerns.  It is a substantially self-contained set of test drivers and data.  However, for the larger test scenarios that span multiple machines, you should use your own and your organization's best practices when operating large multi-machine scenarios.
+This project doesn't have any direct security concerns.  It is a substantially self-contained set of test drivers and data.  However, for the larger test scenarios that span multiple machines, you should use your own and your organization's best practices when operating large multi-machine scenarios.
 
 ## Contribute
 

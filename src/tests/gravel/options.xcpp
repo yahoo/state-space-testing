@@ -1,0 +1,87 @@
+// This is -*- c++ -*- nearly C++2a with Modules TS but in the S.C.O.L.D. stylings that are so popular these days.
+// Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+#divert <fpp>
+#import options
+namespace tests::gravel::options {
+  // e.g. ::options::Bollean is now ::tests::gravel::options::Boolean when such is imported
+  using namespace ::options; // cascade the namespaces
+}
+#import std.string
+#import std.optional
+#import std.tuple
+#import std.string_view
+#import tests.gravel.required.Integral
+#import tests.gravel.Configuration
+namespace tests::gravel::options {
+  //
+  // Recover an integral count (or size) from the syntax.
+  // Emit warnings, errors and so forth.
+  //
+  // Usage:
+  //   
+  //   see tests::gravel::main(...), but also
+  //   std::tie(record_count, warnings_seen, error_seen) = get_count(word, record_count, "record count"sv);
+  //
+  template<required::Integral INTEGRAL> auto get_count(Configuration const &, std::string const &syntax, std::optional<INTEGRAL> previous, std::string_view description) -> std::tuple<std::optional<INTEGRAL>, bool, bool>;
+  //
+  // Validate that the count (or size) is reasonable for the domain.
+  // Emit warnings, errors and so forth.
+  //
+  // Usage:
+  //
+  //   see tests::gravel::main(...), but also
+  //   validate_count(word, record_count);
+  //
+  template<required::Integral INTEGRAL> auto validate_count(Configuration const &, std::optional<INTEGRAL> const &candidate, std::string_view description) -> std::tuple<bool, bool>;
+}
+#endiv
+#divert <tpp>
+#import std.stol
+#import std.size_t
+#import std.exception
+#import std.invalid_argument
+namespace tests::gravel {
+  template<required::Integral INTEGRAL> auto options::get_count(Configuration const &cfg, std::string const &syntax, std::optional<INTEGRAL> previous, std::string_view description) -> std::tuple<std::optional<INTEGRAL>, bool, bool> try {
+    auto warnings_given = false;
+    auto errors_given = false;
+    if (previous) {
+      warnings_given = true;
+      warning(cfg) << "duplicate option, the " << description << " value was already set to " << *previous << "\n";
+    }
+    // <strike>Not {yet,even} bothering to do precise parsing or overflow checking; so 123abc == "123"</strike>
+    std::size_t end{0};
+    auto proposed = std::stol(syntax, &end);
+    if (end != syntax.size()) {
+      throw std::invalid_argument{"sto"}; // it's what they do
+    }
+    if (proposed <= 0) {
+      auto const offense = 0 == proposed ? "zero" : "negative";
+      error(cfg) << "the " << description << " option value, " << /*format::q*/ syntax << ", is " << offense << '\n';
+      return {previous, false, true};    
+    }
+    auto next = std::optional<INTEGRAL>{INTEGRAL(proposed)};
+    return {next, warnings_given, errors_given};
+  } catch (std::exception const &) {
+    // recall that the std::stoi family (e.g., std::stol) both returns failure indications and also throws on failure
+    error(cfg) << "the " << description << " option value, " << /*format::q*/ syntax << ", is not a number\n";
+    return {previous, false, true};    
+  }
+  template<required::Integral INTEGRAL> auto options::validate_count(Configuration const &cfg, std::optional<INTEGRAL> const &candidate, std::string_view description) -> std::tuple<bool, bool> {
+    auto warnings_given = false;
+    auto errors_given = false;
+    if (!candidate) {
+      errors_given = true;
+      error(cfg) << "the " << description << " value was not supplied at all (use '--usage' to see the options)\n";
+    }      
+    if (0 == *candidate) {
+      errors_given = true;
+      warning(cfg) << "the " << description << " value is zero, there is nothing to do\n";
+    }
+    if (0 > *candidate) {
+      errors_given = true;
+      error(cfg) << "the " << description << " value is negative, which has no meaning\n";
+    }
+    return {warnings_given, errors_given};
+  }
+}
+#endiv

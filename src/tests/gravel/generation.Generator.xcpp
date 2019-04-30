@@ -1,0 +1,53 @@
+// This is -*- c++ -*- nearly C++2a with Modules TS but in the S.C.O.L.D. stylings that are so popular these days.
+// Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+#divert <fpp>
+#import tunitas.butano.generation
+namespace tests::gravel::generation {
+  //
+  // The (random) TCF Generator
+  //
+  // Usage:
+  //
+  //   Generator generator{Size{100}};
+  //
+  class Generator;
+  using namespace tunitas::butano::generation; // Sure, a cascade of the namespaces
+}
+#endiv
+#divert <hpp>
+#import std.string
+#import std.uintmax_t
+#import tunitas.butano.generation.randomness.Engine
+#import tunitas.butano.generation.uuid.Distribution
+#import tunitas.butano.generation.tcf.Distribution
+class tests::gravel::generation::Generator {
+public:
+  inline explicit Generator(Size);
+  struct Result;
+  inline auto operator()() -> Result;
+protected:
+  // No need to preserve the enum sense of Size once we're inside the class.
+  std::uintmax_t maximum_size;
+  randomness::Engine engine;
+  generation::uuid::Distribution distribute_uuid;
+  tcf::Distribution distribute_tcf;
+};
+#import tests.gravel.generation.Generator.Result
+#endiv
+#divert <ipp>
+tests::gravel::generation::Generator::Generator(Size size)
+  : maximum_size{size}
+  , engine{0} // [[FIXTHIS]] allow for the seeding with something truly entropic
+  , distribute_uuid{}
+  , distribute_tcf{}
+{ }
+#import want.uuid.fingerprint
+#import tunitas.butano.tcf.consent.encode
+#import std.move
+auto tests::gravel::generation::Generator::operator()() -> Result {
+  auto uu = distribute_uuid(engine);
+  auto fp = fingerprint(uu);
+  auto tcf = encode(distribute_tcf(engine));
+  return Result{std::move(uu), fp, std::move(tcf)};
+}
+#endiv

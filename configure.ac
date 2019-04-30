@@ -1,0 +1,85 @@
+dnl -*- autoconf -*-
+dnl Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+dnl
+dnl ./buildconf &&
+dnl ./configure --prefix=/opt/iab/privacychain --with-std-hyperledger-fabric=/opt/hyperledger/fabric --with-std-tunitas=/opt/tunitas --with-std-scold=/opt/std/scold &&
+dnl make &&
+dnl make check &&
+dnl make install &&
+dnl echo OK DONE
+dnl
+AC_INIT([state-space-testing-full-gravel], [0.0.0], [/dev/null@verizonmedia.com])
+TF_INIT(AC_PACKAGE_NAME, AC_PACKAGE_VERSION, AC_PACKAGE_BUGREPORT)
+
+dnl These options are also in the Makefile.am in AUTOMAKE_OPTIONS
+dnl AM_INIT_AUTOMAKE([no-define subdir-objects foreign])
+AM_SILENT_RULES([yes])
+
+AC_CONFIG_SRCDIR([src/tests/gravel/namespace.xcpp])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_FILES([Makefile lib/tests/config.sh])
+
+#
+# To have submodules
+#   configure.ac: TF_CONFIG_SUBMODULES([submodules], [...list...])
+#   Makefile.am:  SUBDIRS = @subdirs@
+# to have no submodules
+#   comment these schemes out in both places
+#
+
+TF_COMPONENT_METADIRECTORY_TIERS
+TF_ENABLE_GNU
+TF_ENABLE_GDB
+TF_ENABLE_GCC
+TF_ENABLE_MOCK_BUILD
+
+TF_WITH_STD([scold]) dnl the core modules system
+
+TF_WITH_STD([tunitas]) dnl application data types
+TF_WITH_SUBSYSTEM([temerarious-flagship], [], [The Tunitas Build System])
+TF_WITH_SUBSYSTEM([tunitas-basics], [], [The Tunitas Basics Components])
+TF_WITH_SUBSYSTEM([tunitas-butano], [], [The Tunitas Butano TCF Components])
+
+dnl you need one or the other of these
+TF_WITH_STD([hyperledger-fabric])
+TF_WITH_SUBSYSTEM([hyperledger-fabric-sdk], [], [The Hyperledger Fabric C++ Client-side SDK])
+
+TF_WITH_STD([iab-privacychain])
+TF_WITH_SUBSYSTEM([iab-privacychain-sdk], [], [The IAB PrivacyChain C++ Client-side SDK])
+TF_WITH_SUBSYSTEM([statespace-tooling], [], [The State-Space Tooling Components])
+
+# And mention these in $(DEVELOPMENT_AREAS) in Makefile.am
+TF_WITH_MODULE([json])
+TF_WITH_MODULE([leveldb])
+TF_WITH_MODULE([nonstd])
+TF_WITH_MODULE([options])
+TF_WITH_MODULE([posix])
+TF_WITH_MODULE([rabinpoly])
+TF_WITH_MODULE([std])
+TF_WITH_MODULE([string]) dnl a.k.a. c-string
+TF_WITH_MODULE([sys])
+TF_WITH_MODULE([uuid])
+
+TF_WITH_MODULE([cppunit])
+TF_WITH_MODULE([rigging]) dnl a.k.a. unit-rigging -> rigging-unit
+
+TF_MSG_VERBOSE([compiler-specific (alphabetical)])
+TF_WITH_NONSTD([cppunit])
+TF_WITH_NONSTD([gcc]) dnl but modern gcc-7.1.0 & beyond is fine
+TF_WITH_NONSTD([jsoncpp]) dnl but modern jsoncpp-1.8.4 is fine
+TF_WITH_USR_LOCAL
+
+AM_PROG_AR
+LT_PREREQ([2.4.2])
+LT_INIT
+AC_PROG_CC
+AC_PROG_CXX
+AM_PROG_CC_C_O
+TF_PROG_DC
+
+TF_CHECK_CPPUNIT
+TF_CHECK_JSONCPP
+TF_CHECK_STD_FILESYSTEM dnl get @libstd_filesystem@ for Makefile.am
+
+TF_FINALIZE
