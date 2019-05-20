@@ -1,6 +1,6 @@
 # Required Packages
 
-This document contains an estimate of the tools, components their versions which you will need to build this repository.  More details can be found upstream the documentation for the lead repository, the [State Space Packaging](https://github.com/yahoo/state-space-packaging/blob/master/PACKAGES.md) as well as the [Temerarious Flagship Build System](https://github.com/yahoo/temerarious-flagship/blob/master/README.md).  The mentions in this document pertain only to this repository, the _State Space Tooling_.
+This document contains an estimate of the tools, components, and their versions, which you will need to build this repository.  More details can be found upstream the documentation for the lead repository, the [State Space Packaging](https://github.com/yahoo/state-space-packaging/blob/master/PACKAGES.md) as well as the [Temerarious Flagship Build System](https://github.com/yahoo/temerarious-flagship/blob/master/README.md).  The mentions in this document pertain only to this repository, the _State Space Testing_.
 
 ## State Space
 
@@ -52,8 +52,8 @@ This is a C++ project.  The project approaches the upcoming C++20 standard, wher
     * `make` >= 4.2
 * The Tunitas Build System
     * [temerarious-flagship](https://github.com/yahoo/temerarious-flagship) >= 1.0.0, some build system components
-* The [S.C.O.L.D.](https://www.scold-lang.org) [toolchain](https://git.scold-lang.org/core) and modules
-    * [hypogeal-twilight](https://git.scold-lang.org/core/hypogeal-twilight) >= 0.43, fundamental build system components.
+* The [S.C.O.L.D.](https://www.scold-lang.org) [toolchain](https://git.scold-lang.org/core) and [modules](https://git.scold-lang.org/modules).
+    * [hypogeal-twilight](https://git.scold-lang.org/core/hypogeal-twilight) >= 0.43, build system components.
     * [incendiary-sophist](https://git.scold-lang.org/core/incendiary-sophist) >= 0.1, the test harness, is optional.
     * [anguish-answer](https://git.scold-lang.org/core/anguish-answer) >= 0.1, the preprocessor towards a [unitary build](https://mesonbuild.com/Unity-builds.html).
 * `perl` prefer `perl` >= 5.28
@@ -88,15 +88,16 @@ A recent Ubuntu should be fine.
     * Fedora 28, available.
     * Fedora 29, current.
     * Fedora 30, current.
+    * Fedora 31, soon.
 * Hyperledger Fabric
     * <em>Release 01 (Heavy Fish)</em> use Docker (Hyperledger Fabric v1.1) supported Privacy Chain v1.0 <em>Release 01 (Worthy Cupboard)</em>
     * <em>Release 02 (Giddy Llama)</em> unavailable (Hyperledger Fabric v1.2)
     * <em>Release 03 (Furious Eagle)</em> unavailable (Hyperledger Fabric v1.3)
-    * <em>Release 04 (Bitter Vole)</em> contains <em>e.g.</em> `hyperledger-fabric-cluster-1.4.0-4.vzmf04.fc27.src.rpm`
+    * <em>Release 04 (Bitter Vole)</em> contains <em>e.g.</em> `hyperledger-fabric-cluster-1.4.0-4.vzm04.fc27.src.rpm`
 * [Tunitas](https://github.com/yahoo/tunitas-packaging/blob/master/README.md)
     * <em>Release 01 (Famous Oak)</em>, current.
-    * <em>Release 02 (Towering Redwood)</em>, forthcoming, date TBD.
-* [S.C.O.L.D. C++](https://www.scold-lang.org) (Scalable Object Location Disaggregation)
+    * <em>Release 02 (Towering Redwood)</em>, forthcoming, [2019-Q3](https://wiki.tunitas.technology/page/Release_02,_Towering_Redwood).
+* [S.C.O.L.D.](https://www.scold-lang.org) (Scalable C++ Object Location Disaggregation)
     * <em>Release 02 (Maroon Iron Crow)</em>, possible.
     * <em>Release 03 (Red Mercury Goose)</em>, current
     * <em>Release 04 (Green Copper Heron)</em>, preferred.
