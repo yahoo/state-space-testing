@@ -30,6 +30,18 @@ This project contains several sorts of tests for the PrivacyChain database manag
 
 Not all of these test scenarios are implemented in the 0.1 release.
 
+## Dependencies
+
+The [configuration](#configuration) step will check for many but not all required packages and operating system features.  There is a list of known [package-dependencies](https://github.com/yahoo/state-space-testing/blob/master/PACKAGES.md) which you will need to install beyond your base operating system.
+
+Generally, the dependencies are among:
+- The Hyperledger Fabric database and its Public Key Infrastructure (PKI) services.
+- Various components of the Tunitas system; <em>e.g.</em> the [Basic Components](https://github.com/yahoo/tunitas-basic).
+- A modern (C++2a) development environment.
+- A recent Fedora, but any recent Linux distro should suffice.
+
+The State Space project was developed on Fedora 27 through Fedora 30 using GCC 7 and GCC 8 with `-fconcepts` and at least `-std=c++1z`.  More details on the development environment and the build system can be found in [temerarious-flagship](https://github.com/yahoo/temerarious-flagship/blob/master/README.md).
+
 ## Install
 
 This project is not independent. It expects to be configured as a submodule of [State Space](https://github.com/yahoo/statespace).  This should happen naturally in the course of the git submodule activation procedure.
