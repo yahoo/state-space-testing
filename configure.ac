@@ -1,5 +1,7 @@
-dnl -*- autoconf -*-
-dnl Copyright (c) 2019 Verizon Media, Inc.  See the LICENSE statement nearby.
+dnl This is a GNU -*- autoconf -*- specification that is processed by Autoconf.
+dnl Copyright 2019, Oath Inc.
+dnl Licensed under the terms of the Apache-2.0 license.
+dnl See the LICENSE file in https://github.com/yahoo/state-space-testing/blob/master/LICENSE for terms.
 dnl
 dnl ./buildconf &&
 dnl ./configure --prefix=/opt/iab/privacychain --with-std-hyperledger-fabric=/opt/hyperledger/fabric --with-std-tunitas=/opt/tunitas --with-std-scold=/opt/std/scold &&
@@ -47,7 +49,7 @@ TF_WITH_SUBSYSTEM([hyperledger-fabric-sdk], [], [The Hyperledger Fabric C++ Clie
 
 TF_WITH_STD([iab-privacychain])
 TF_WITH_SUBSYSTEM([iab-privacychain-sdk], [], [The IAB PrivacyChain C++ Client-side SDK])
-TF_WITH_SUBSYSTEM([statespace-tooling], [], [The State-Space Tooling Components])
+TF_WITH_SUBSYSTEM([state-space-tooling], [], [The State-Space Tooling Components])
 
 # And mention these in $(DEVELOPMENT_AREAS) in Makefile.am
 TF_WITH_MODULE([json])

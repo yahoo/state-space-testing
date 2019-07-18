@@ -2,12 +2,10 @@
 
 This repository contains the end-to-end, reliability and performance test cases for the State Space implementation of the IAB PrivacyChain Reference Design.   These test cases relate to the State Space services and database manager.
 
-![banner](logo.png)
-
 More detailed information
 about the scope and purpose of the State Space implementation of the IAB PrivacyChain Reference Design
 can be found at the following locations:
-* [State Space](https://github.com/yahoo/statespace)
+* [State Space](https://github.com/yahoo/state-space)
 * [IAB PrivacyChain](https://github.com/InteractiveAdvertisingBureau/PrivacyChain/blob/master/README.md) Reference Design.
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
@@ -44,15 +42,15 @@ The State Space project was developed on Fedora 27 through Fedora 30 using GCC 7
 
 ## Install
 
-This project is not independent. It expects to be configured as a submodule of [State Space](https://github.com/yahoo/statespace).  This should happen naturally in the course of the git submodule activation procedure.
+This project is not independent. It expects to be configured as a submodule of [State Space](https://github.com/yahoo/state-space).  This should happen naturally in the course of the git submodule activation procedure.
 
 To install the test code independently of its status as a submodule of State Space, run the following command:
 
 ```
-git clone https://github.com/yahoo/statespace-testing.git
+git clone https://github.com/yahoo/state-space-testing.git
 ```
 
-This will create a directory called `statespace-testing` and download the contents of this repo to it.
+This will create a directory called `state-space-testing` and download the contents of this repo to it.
 
 ## Configuration
 
@@ -74,8 +72,8 @@ Each individual test case will have a statement of purpose and instructions desc
 
 Again, a reminder: these are stress tests which populate the database on their own terms.  They should be used wisely and on on test databases (test channels) only. They should not be applied to the network.
 
-* [full-of-gravel](https://github.com/yahoo/statespace-testing/blob/master/tests/full-of-gravel) fills the database with random data.
-* [reps-and-sets](https://github.com/yahoo/statespace-testing/blob/master/tests/reps-and-sets) exercises CRUD in the database with its own data set.
+* [full-of-gravel](https://github.com/yahoo/state-space-testing/blob/master/tests/full-of-gravel) fills the database with random data.
+* [reps-and-sets](https://github.com/yahoo/state-space-testing/blob/master/tests/reps-and-sets) exercises CRUD in the database with its own data set.
 
 ## Security
 
@@ -86,7 +84,11 @@ This project doesn't have any direct security concerns.  It is a substantially s
 Please refer to [the contributing.md file](Contributing.md) for information about how to get involved. We welcome issues, questions, and pull requests. Pull Requests are welcome.
 
 ## Maintainers
-Wendell Baker <wbaker@verizonmedia.com>
+- Wendell Baker <wbaker@verizonmedia.com>
+- The State Space Team at Verizon Media.
+- The IAB PrivacyChain Engineering Working Group.
+
+You may contact us at least at <state-space@verizonmedia.com>
 
 ## License
 
