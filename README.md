@@ -85,8 +85,8 @@ Please refer to [the contributing.md file](Contributing.md) for information abou
 
 ## Maintainers
 - Wendell Baker <wbaker@verizonmedia.com>
-- The State Space Team at Verizon Media.
-- The IAB PrivacyChain Engineering Working Group.
+- The State Space Team at Verizon Media <state-space@verizonmedia.com>
+- The [IAB PrivacyChain Engineering Working Group](https://iabtechlab.com/working-groups/blockchain-working-group/).
 
 You may contact us at least at <state-space@verizonmedia.com>
 
