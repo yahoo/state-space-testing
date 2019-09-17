@@ -38,8 +38,8 @@ golden=${dedot0%.test}.gold
 # expects incendiary-sophist >= 0.3.0 with the packaged sysexits.sh and compare_output.sh
 # which supply (shell) function difference() {...} and function successful() {...}
 source ${libdir?}/tests/config.sh && 
-source ${incendiary_sophist_riggingdir}/sysexits.sh &&
-source ${incendiary_sophist_riggingdir}/compare_output.sh ||
+source ${incendiary_sophist_riggingdir?}/sysexits.sh &&
+source ${incendiary_sophist_riggingdir?}/compare_output.sh ||
 exit 70
 
 function canonicalize_output_file() {

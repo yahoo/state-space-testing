@@ -37,8 +37,12 @@ DEVELOPMENT_AREAS = \
   $(state_space_tooling_prefix) \
   $(tunitas_basics_prefix) \
   $(tunitas_butano_prefix) \
-  $(hyperledger_fabric_sdk_prefix) \
-  $(iab_privacychain_sdk_prefix) \
+  $(state_space_fabric_sdk_prefix) \
+  $(state_space_privacychain_sdk_prefix) \
+  $(hyperledger_fabric_db_prefix) \
+  $(hyperledger_fabric_ca_prefix) \
+  $(hyperledger_fabric_prefix) \
+  $(hyperledger_prefix) \
   $(end)
 TESTING_AREAS = \
   $(module_cppunit_prefix) \
@@ -49,15 +53,16 @@ INSTALLATION_AREAS = \
   $(nonstd_gcc_prefix) \
   $(nonstd_jsoncpp_prefix) \
   $(nonstd_yaml_prefix) \
-  $(std_scold_prefix) \
-  $(std_tunitas_prefix) \
   $(std_hyperledger_fabric_prefix) \
-  $(std_iab_privacychain_prefix) \
+  $(std_scold_prefix) \
+  $(std_state_space_prefix) \
+  $(std_tunitas_prefix) \
   $(end)
 
 default: all
 
-module_SOURCE_SET = $(none)
+module_SOURCE_SET    = $(comment want to use this nice name)
+module_BB_SOURCE_SET = $(comment but have to use this deprecating variant)
 
 .PHONY: clean-local mostlyclean-local distclean-local
 clean-local mostlyclean-local distclean-local::

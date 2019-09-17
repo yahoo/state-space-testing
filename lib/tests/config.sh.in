@@ -54,21 +54,39 @@ if [[ "@"incendiary_sophist_riggingdir"@" == "${incendiary_sophist_riggingdir}" 
     eval ${incendiary_sophist_libdir:+incendiary_sophist_riggingdir=${incendiary_sophist_libdir}/rigging}
 fi
 
+function __incendiary_sophist_complain() {
+    local BADNESS=$1; shift
+    local directory=$1; shift
+    local location=$1; shift
+    echo "$BADNESS: MISSING directory $directory at $location" 1>&2
+}
+function __incendiary_sophist_warn() {
+    local unused_code=$1; shift
+    __incendiary_sophist_complain WARNING "$@"
+}
+function __incendiary_sophist_fail() {
+    local code=$1; shift
+    __incendiary_sophist_complain ERROR "$@"
+    exit $code
+}
 # If --without-incendiary-sophist was asserted, then unset everything
 # If --with-incendiary-sophist was asserted, then crudely prove the directories exist.
 function __incendiary_sophist_with_or_without_name() {
+    local badness=$1; shift
     local name=$1; shift
     local subname=$1; shift
     eval "
     if test -n \"\$${name}_${subname}\" ;
-    then test -d \"\$${name}_${subname}\" || exit 70;
+    then test -d \"\$${name}_${subname}\" || __incendiary_sophist_$badness 70 \"${name}_${subname}\" \"\$${name}_${subname}\";
     else unset ${name}_${subname};
     fi"
 }
 function __incendiary_sophist_with_or_without() {
-    __incendiary_sophist_with_or_without_name $1 prefix
-    __incendiary_sophist_with_or_without_name $1 libdir
-    __incendiary_sophist_with_or_without_name $1 riggingdir
+    # WATCHOUT - there is no incendiary_sophist_libdir in incendiary-sophist-0.2.2, only riggingdir
+    # DO NOT fail on missing libdir (only warn); do fail on missing prefix or riggingdir
+    __incendiary_sophist_with_or_without_name fail $1 prefix
+    __incendiary_sophist_with_or_without_name warn $1 libdir
+    __incendiary_sophist_with_or_without_name fail $1 riggingdir
 }
 function __incendiary_sophist() {
     __incendiary_sophist_with_or_without incendiary_sophist
@@ -76,5 +94,8 @@ function __incendiary_sophist() {
     unset __incendiary_sophist_with_or_without_name
     unset __incendiary_sophist_with_or_without
     unset __incendiary_sophist
+    unset __incendiary_sophist_fail
+    unset __incendiary_sophist_warn
+    unset __incendiary_sophist_complain
 }
 __incendiary_sophist

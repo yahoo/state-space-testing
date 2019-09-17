@@ -73,14 +73,15 @@ namespace tests::gravel {
     if (!candidate) {
       errors_given = true;
       error(cfg) << "the " << description << " value was not supplied at all (use '--usage' to see the options)\n";
-    }      
-    if (0 == *candidate) {
-      errors_given = true;
-      warning(cfg) << "the " << description << " value is zero, there is nothing to do\n";
-    }
-    if (0 > *candidate) {
-      errors_given = true;
-      error(cfg) << "the " << description << " value is negative, which has no meaning\n";
+    } else {
+      if (0 == *candidate) {
+        errors_given = true;
+        warning(cfg) << "the " << description << " value is zero, there is nothing to do\n";
+      }
+      if (0 > *candidate) {
+        errors_given = true;
+        error(cfg) << "the " << description << " value is negative, which has no meaning\n";
+      }
     }
     return {warnings_given, errors_given};
   }

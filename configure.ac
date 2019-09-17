@@ -10,7 +10,7 @@ dnl make check &&
 dnl make install &&
 dnl echo OK DONE
 dnl
-AC_INIT([state-space-testing], [0.0.0], [state-space@verizonmedia.com])
+AC_INIT([state-space-testing], [0.0.1], [state-space@verizonmedia.com])
 TF_INIT(AC_PACKAGE_NAME, AC_PACKAGE_VERSION, AC_PACKAGE_BUGREPORT)
 
 dnl These options are also in the Makefile.am in AUTOMAKE_OPTIONS
@@ -36,22 +36,34 @@ TF_ENABLE_GDB
 TF_ENABLE_GCC
 TF_ENABLE_MOCK_BUILD
 
-TF_WITH_STD([scold]) dnl the core modules system
+#
+# To perform production builds, only the WITH_STD mentions must be replicated in
+#   Makefile.am: INSTALLATION_AREAS
+#
+# To perform development builds, the mentions herein must be replicated faithfully
+#   Makefile.am: DEVLOPMENT_AREAS, TESTING_AREAS
+#   Makefile.am: INSTALLATION_AREAS (same as before)
+#
+
+TF_WITH_STD([state-space])
+TF_WITH_SUBSYSTEM([state-space-privacychain-sdk], [], [The IAB PrivacyChain C++ Client-side SDK])
+TF_WITH_SUBSYSTEM([state-space-fabric-sdk], [], [The State Space ersatz Hyperledger Fabric C++ Client-side SDK])
+TF_WITH_SUBSYSTEM([state-space-tooling], [], [The State-Space Tooling Components])
 
 TF_WITH_STD([tunitas]) dnl application data types
 TF_WITH_SUBSYSTEM([temerarious-flagship], [], [The Tunitas Build System])
 TF_WITH_SUBSYSTEM([tunitas-basics], [], [The Tunitas Basics Components])
 TF_WITH_SUBSYSTEM([tunitas-butano], [], [The Tunitas Butano TCF Components])
 
-dnl you need one or the other of these
-TF_WITH_STD([hyperledger-fabric])
-TF_WITH_SUBSYSTEM([hyperledger-fabric-sdk], [], [The Hyperledger Fabric C++ Client-side SDK])
-
-TF_WITH_STD([iab-privacychain])
-TF_WITH_SUBSYSTEM([iab-privacychain-sdk], [], [The IAB PrivacyChain C++ Client-side SDK])
-TF_WITH_SUBSYSTEM([state-space-tooling], [], [The State-Space Tooling Components])
+dnl Release 01 (Maximum Hammer) does not use this
+TF_WITH_STD([hyperledger-fabric]) dnl You won't need this until Hyperledger Fabric delivers (we deliver) a C++ API (an "SDK")
+TF_WITH_SUBSYSTEM([hyperledger-fabric-ca], [], [The Hyperledger Fabric Certificate Authority C++ Client-side SDK])
+TF_WITH_SUBSYSTEM([hyperledger-fabric-ca], [], [The Hyperledger Fabric Certificate Authority C++ Client-side SDK])
+TF_WITH_SUBSYSTEM([hyperledger-fabric], [], [The Hyperledger Fabric C++ Client-side SDK])
+TF_WITH_SUBSYSTEM([hyperledger], [], [The Hyperledger C++ Client-side SDK])
 
 # And mention these in $(DEVELOPMENT_AREAS) in Makefile.am
+TF_WITH_STD([scold]) dnl the core modules and build system; normally everything is found in /opt/scold
 TF_WITH_MODULE([json])
 TF_WITH_MODULE([leveldb])
 TF_WITH_MODULE([nonstd])
@@ -62,9 +74,10 @@ TF_WITH_MODULE([std])
 TF_WITH_MODULE([string]) dnl a.k.a. c-string
 TF_WITH_MODULE([sys])
 TF_WITH_MODULE([uuid])
-
+TF_WITH_SUBSYSTEM([hypogeal-twilight], [], [The  S.C.O.L.D. Addenda to the GNU Autotools Build Rigging])
+TF_WITH_SUBSYSTEM([incendiary-sophist], [], [The S.C.O.L.D. Addenda to the GNU Autotools Test Rigging])
 TF_WITH_MODULE([cppunit])
-TF_WITH_MODULE([rigging]) dnl a.k.a. unit-rigging -> rigging-unit
+TF_WITH_MODULE([rigging]) dnl a.k.a. unit-rigging -> rigging-unit -> rigging
 
 TF_MSG_VERBOSE([compiler-specific (alphabetical)])
 TF_WITH_NONSTD([cppunit])
