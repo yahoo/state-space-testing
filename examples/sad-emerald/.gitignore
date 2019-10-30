@@ -1,0 +1,19 @@
+# legitimate junk of this repo
+channel-artifacts
+crypto-config
+
+# These all should be in your personal ~/.config/git/ignore, but in case they are not
+# editor and debug-edit-compile-test looping
+*~
+o.*.out
+
+# general trash
+t99.*
+j99.*
+
+# junky stuff
+sandbox
+tmp
+tmp.*
+old
+old.*
