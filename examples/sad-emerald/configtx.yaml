@@ -6,8 +6,6 @@
 # See the LICENSE file at https://git.state-space.dev/upstream/hyperledger/fabric/samples/tree/LICENSE
 # SPDX-License-Identifier: Apache-2.0
 #
-# Usage:
-
   
 ---
 ################################################################################
@@ -35,7 +33,7 @@ Organizations:
 
         # MSPDir is the filesystem path which contains the MSP configuration
         # These are here for documentation purposes, they are overridden as CORE_PEER_MSPCONFIGPATH
-        MSPDir: crypto-config/ordererOrganizations/example.com/msp
+        MSPDir: crypto-config/ordererOrganizations/sad-emerald.state-space.network/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -54,7 +52,7 @@ Organizations:
     - &Org1
         Name: Org1MSP
         ID: Org1MSP
-        MSPDir: crypto-config/peerOrganizations/org1.example.com/msp # reminder ... documentation only, CORE_PEER_MSPCONFIGPATH
+        MSPDir: crypto-config/peerOrganizations/org1.sad-emerald.state-space.network/msp # reminder ... documentation only, CORE_PEER_MSPCONFIGPATH
         Policies:
             Readers:
                 Type: Signature
@@ -68,13 +66,13 @@ Organizations:
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used for cross org gossip communication.
             # Note, this value is only encoded in the genesis block in the Application section context.
-            - Host: peer0.org1.example.com
+            - Host: peer0.org1.sad-emerald.state-space.network
               Port: 7051
 
     - &Org2
         Name: Org2MSP
         ID: Org2MSP
-        MSPDir: crypto-config/peerOrganizations/org2.example.com/msp # reminder ... documentation only, see CORE_PEER_MSPCONFIGPATH
+        MSPDir: crypto-config/peerOrganizations/org2.sad-emerald.state-space.network/msp # reminder ... documentation only, see CORE_PEER_MSPCONFIGPATH
         Policies:
             Readers:
                 Type: Signature
@@ -86,8 +84,8 @@ Organizations:
                 Type: Signature
                 Rule: "OR('Org2MSP.admin')"
         AnchorPeers:
-            - Host: peer0.org2.example.com
-              Port: 9051
+            - Host: peer0.org2.sad-emerald.state-space.network
+              Port: 7051
 
 ################################################################################
 #
@@ -178,7 +176,7 @@ Orderer: &OrdererDefaults
     OrdererType: solo
 
     Addresses:
-        - orderer.example.com:7050
+        - orderer.sad-emerald.state-space.network:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s
@@ -209,26 +207,26 @@ Orderer: &OrdererDefaults
         # The set of Raft replicas for this network. For the etcd/raft-based implementation, we expect every replica to also be an OSN.
         # Therefore, a subset of the host:port items enumerated in this list should be replicated under the Orderer.Addresses key above.
         Consenters:
-            - Host: orderer.example.com
+            - Host: orderer.sad-emerald.state-space.network
               Port: 7050
-              ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt # reminder: documentation ... overridden at the call site
-              ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
-            - Host: orderer2.example.com
+              ClientTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer.sad-emerald.state-space.network/tls/server.crt # reminder: documentation ... overridden at the call site
+              ServerTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer.sad-emerald.state-space.network/tls/server.crt
+            - Host: orderer2.sad-emerald.state-space.network
               Port: 7050
-              ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
-              ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
-            - Host: orderer3.example.com
+              ClientTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer2.sad-emerald.state-space.network/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer2.sad-emerald.state-space.network/tls/server.crt
+            - Host: orderer3.sad-emerald.state-space.network
               Port: 7050
-              ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
-              ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
-            - Host: orderer4.example.com
+              ClientTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer3.sad-emerald.state-space.network/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer3.sad-emerald.state-space.network/tls/server.crt
+            - Host: orderer4.sad-emerald.state-space.network
               Port: 7050
-              ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/server.crt
-              ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/server.crt
-            - Host: orderer5.example.com
+              ClientTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer4.sad-emerald.state-space.network/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer4.sad-emerald.state-space.network/tls/server.crt
+            - Host: orderer5.sad-emerald.state-space.network
               Port: 7050
-              ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer5.example.com/tls/server.crt
-              ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer5.example.com/tls/server.crt
+              ClientTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer5.sad-emerald.state-space.network/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer5.sad-emerald.state-space.network/tls/server.crt
 
     # Organizations is the list of orgs which are defined as participants on the orderer side of the network
     Organizations:
@@ -288,6 +286,17 @@ Channel: &ChannelDefaults
 ################################################################################
 Profiles:
 
+    TwoOrgsChannel:
+        Consortium: SampleConsortium
+        <<: *ChannelDefaults
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org1
+                - *Org2
+            Capabilities:
+                <<: *ApplicationCapabilities
+
     TwoOrgsOrdererGenesis:
         <<: *ChannelDefaults
         Orderer:
@@ -301,16 +310,6 @@ Profiles:
                 Organizations:
                     - *Org1
                     - *Org2
-    TwoOrgsChannel:
-        Consortium: SampleConsortium
-        <<: *ChannelDefaults
-        Application:
-            <<: *ApplicationDefaults
-            Organizations:
-                - *Org1
-                - *Org2
-            Capabilities:
-                <<: *ApplicationCapabilities
 
     SampleDevModeKafka:
         <<: *ChannelDefaults
@@ -321,68 +320,56 @@ Profiles:
             OrdererType: kafka
             Kafka:
                 Brokers:
-                - kafka.example.com:9092
-
+                    - kafka.sad-emerald.state-space.network:9092
             Organizations:
-            - *OrdererOrg
+                - *OrdererOrg
             Capabilities:
                 <<: *OrdererCapabilities
-        Application:
-            <<: *ApplicationDefaults
-            Organizations:
-            - <<: *OrdererOrg
         Consortiums:
             SampleConsortium:
                 Organizations:
-                - *Org1
-                - *Org2
+                    - *Org1
+                    - *Org2
 
     SampleMultiNodeEtcdRaft:
         <<: *ChannelDefaults
-        Capabilities:
-            <<: *ChannelCapabilities
         Orderer:
             <<: *OrdererDefaults
             OrdererType: etcdraft
             EtcdRaft:
                 Consenters:
-                - Host: orderer.example.com
-                  Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt # reminder: ... documentation, overridden at the call site
-                  ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
-                - Host: orderer2.example.com
-                  Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
-                - Host: orderer3.example.com
-                  Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
-                - Host: orderer4.example.com
-                  Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/server.crt
-                - Host: orderer5.example.com
-                  Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer5.example.com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer5.example.com/tls/server.crt
+                    - Host: orderer.sad-emerald.state-space.network
+                      Port: 7050
+                      ClientTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer.sad-emerald.state-space.network/tls/server.crt # reminder: ... documentation, overridden at the call site
+                      ServerTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer.sad-emerald.state-space.network/tls/server.crt
+                    - Host: orderer2.sad-emerald.state-space.network
+                      Port: 7050
+                      ClientTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer2.sad-emerald.state-space.network/tls/server.crt
+                      ServerTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer2.sad-emerald.state-space.network/tls/server.crt
+                    - Host: orderer3.sad-emerald.state-space.network
+                      Port: 7050
+                      ClientTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer3.sad-emerald.state-space.network/tls/server.crt
+                      ServerTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer3.sad-emerald.state-space.network/tls/server.crt
+                    - Host: orderer4.sad-emerald.state-space.network
+                      Port: 7050
+                      ClientTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer4.sad-emerald.state-space.network/tls/server.crt
+                      ServerTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer4.sad-emerald.state-space.network/tls/server.crt
+                    - Host: orderer5.sad-emerald.state-space.network
+                      Port: 7050
+                      ClientTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer5.sad-emerald.state-space.network/tls/server.crt
+                      ServerTLSCert: crypto-config/ordererOrganizations/sad-emerald.state-space.network/orderers/orderer5.sad-emerald.state-space.network/tls/server.crt
             Addresses:
-                - orderer.example.com:7050
-                - orderer2.example.com:7050
-                - orderer3.example.com:7050
-                - orderer4.example.com:7050
-                - orderer5.example.com:7050
-
+                - orderer.sad-emerald.state-space.network:7050
+                - orderer2.sad-emerald.state-space.network:7050
+                - orderer3.sad-emerald.state-space.network:7050
+                - orderer4.sad-emerald.state-space.network:7050
+                - orderer5.sad-emerald.state-space.network:7050
             Organizations:
-            - *OrdererOrg
+                - *OrdererOrg
             Capabilities:
                 <<: *OrdererCapabilities
-        Application:
-            <<: *ApplicationDefaults
-            Organizations:
-            - <<: *OrdererOrg
         Consortiums:
             SampleConsortium:
                 Organizations:
-                - *Org1
-                - *Org2
+                    - *Org1
+                    - *Org2

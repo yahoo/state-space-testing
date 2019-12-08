@@ -1,18 +1,19 @@
 OrdererOrgs:
   - Name: Orderer
-    Domain: example.com
+    Domain: sad-emerald.state-space.network
+    EnableNodeOUs: true
     Specs:
       - Hostname: orderer
 PeerOrgs:
   - Name: Org1
-    Domain: org1.example.com
+    Domain: org1.sad-emerald.state-space.network
     EnableNodeOUs: true
     Template:
       Count: 2
     Users:
       Count: 1
   - Name: Org2
-    Domain: org2.example.com
+    Domain: org2.sad-emerald.state-space.network
     EnableNodeOUs: true
     Template:
       Count: 2
