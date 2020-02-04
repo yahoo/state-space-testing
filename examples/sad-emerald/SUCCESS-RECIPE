@@ -1,0 +1,47 @@
+Orderer Administrator Host: eternal
+Peer Administrator Hosts: ethical eunoia
+Also see https://wiki.state-space.solutions/page/Experiences#Building_the_sad-emerald_Cluster
+
+ethical
+sudo -u fabric env CORE_PEER_ADDRESS=peer0.org1.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer channel create --tls --cafile /etc/hyperledger/fabric/orderer/tlsca/tlsca.sad-emerald.state-space.network-cert.pem --orderer orderer.sad-emerald.state-space.network:7050 --channelID mychannel --file /var/hyperledger/fabric/channel-artifacts/mychannel.tx --outputBlock /var/hyperledger/fabric/channel-artifacts/mychannel.block
+
+sudo -u fabric env CORE_PEER_ADDRESS=peer0.org1.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer channel join --tls --cafile /etc/hyperledger/fabric/orderer/tlsca/tlsca.sad-emerald.state-space.network-cert.pem --orderer orderer.sad-emerald.state-space.network:7050 --blockpath /var/hyperledger/fabric/channel-artifacts/mychannel.block
+sudo -u fabric env CORE_PEER_ADDRESS=peer1.org1.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer channel join --tls --cafile /etc/hyperledger/fabric/orderer/tlsca/tlsca.sad-emerald.state-space.network-cert.pem --orderer orderer.sad-emerald.state-space.network:7050 --blockpath /var/hyperledger/fabric/channel-artifacts/mychannel.block
+sudo -u fabric env FABRIC_LOGGING_SPEC=ERROR CORE_PEER_MSCONFIGPATH=/etc/hyperledger/fabric/msp CORE_PEER_LOCALMSPID=Org1MSP CORE_PEER_ID=admin.org1 CORE_PEER_ADDRESS=peer0.org1.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer channel list --tls --cafile /etc/hyperledger/fabric/orderer/tlsca/tlsca.sad-emerald.state-space.network-cert.pem
+
+scp /var/hyperledger/fabric/channel-artifacts/mychannel.block eunoia:/var/hyperledger/fabric/channel-artifacts/.
+
+eunoia
+sudo -u fabric env CORE_PEER_ADDRESS=peer0.org2.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer channel join --tls --cafile /etc/hyperledger/fabric/orderer/tlsca/tlsca.sad-emerald.state-space.network-cert.pem --orderer orderer.sad-emerald.state-space.network:7050 --blockpath /var/hyperledger/fabric/channel-artifacts/mychannel.block 
+sudo -u fabric env CORE_PEER_ADDRESS=peer1.org2.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer channel join --tls --cafile /etc/hyperledger/fabric/orderer/tlsca/tlsca.sad-emerald.state-space.network-cert.pem --orderer orderer.sad-emerald.state-space.network:7050 --blockpath /var/hyperledger/fabric/channel-artifacts/mychannel.block 
+sudo -u fabric env FABRIC_LOGGING_SPEC=ERROR CORE_PEER_MSCONFIGPATH=/etc/hyperledger/fabric/msp CORE_PEER_LOCALMSPID=Org2MSP CORE_PEER_ID=admin.org2 CORE_PEER_ADDRESS=peer0.org2.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer channel list --tls --cafile /etc/hyperledger/fabric/orderer/tlsca/tlsca.sad-emerald.state-space.network-cert.pem
+
+
+ethical
+sudo -u fabric env CORE_PEER_ADDRESS=peer0.org1.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer channel update --tls --cafile /etc/hyperledger/fabric/orderer/tlsca/tlsca.sad-emerald.state-space.network-cert.pem --orderer orderer.sad-emerald.state-space.network:7050 --channelID mychannel --file /var/hyperledger/fabric/channel-artifacts/Org1MSPanchors.tx 
+
+eunoia
+sudo -u fabric env CORE_PEER_ADDRESS=peer0.org2.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer channel update --tls --cafile /etc/hyperledger/fabric/orderer/tlsca/tlsca.sad-emerald.state-space.network-cert.pem --orderer orderer.sad-emerald.state-space.network:7050 --channelID mychannel --file /var/hyperledger/fabric/channel-artifacts/Org2MSPanchors.tx 
+
+ethical
+sudo -u fabric env GOPATH=/var/hyperledger/fabric/chaincode/golang CORE_PEER_ADDRESS=peer0.org1.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer chaincode install -n mycc -v 1.0 -l golang -p emerald_cc
+NOT YET sudo -u fabric env GOPATH=/var/hyperledger/fabric/chaincode/golang CORE_PEER_ADDRESS=peer1.org1.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer chaincode install -n mycc -v 1.0 -l golang -p emerald_cc
+
+eunoia
+sudo -u fabric env GOPATH=/var/hyperledger/fabric/chaincode/golang CORE_PEER_ADDRESS=peer0.org2.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer chaincode install -n mycc -v 1.0 -l golang -p emerald_cc
+NOT YET sudo -u fabric env GOPATH=/var/hyperledger/fabric/chaincode/golang CORE_PEER_ADDRESS=peer1.org2.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer chaincode install -n mycc -v 1.0 -l golang -p emerald_cc
+
+(does not matter where this occurs from)
+sudo -u fabric env CORE_PEER_ADDRESS=peer0.org2.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer chaincode instantiate --tls --cafile /etc/hyperledger/fabric/orderer/tlsca/tlsca.sad-emerald.state-space.network-cert.pem --channelID mychannel -n mycc -v 1.0 -l golang -c '{"Args":["emeraldness","greenness"]}' -P "OR ('Org1MSP.peer','Org2MSP.peer')" 
+
+
+ethical
+sudo -u fabric env CORE_PEER_ADDRESS=peer0.org1.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer chaincode invoke --tls --cafile /etc/hyperledger/fabric/orderer/tlsca/tlsca.sad-emerald.state-space.network-cert.pem --channelID mychannel -n mycc -c '{"Args":["set","rubiness","redness"]}' 
+sudo -u fabric env CORE_PEER_ADDRESS=peer0.org1.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer chaincode query --channelID mychannel -n mycc -c '{"Args":["get","emeraldness"}'
+sudo -u fabric env CORE_PEER_ADDRESS=peer0.org1.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer chaincode query --channelID mychannel -n mycc -c '{"Args":["get","rubiness"}'
+
+eunoia
+sudo -u fabric env CORE_PEER_ADDRESS=peer0.org2.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer chaincode query --channelID mychannel -n mycc -c '{"Args":["get","emeraldness"]}'
+sudo -u fabric env CORE_PEER_ADDRESS=peer0.org2.sad-emerald.state-space.network:7051 /opt/hyperledger/fabric/bin/peer chaincode query --channelID mychannel -n mycc -c '{"Args":["get","rubiness"]}' 
+
+
