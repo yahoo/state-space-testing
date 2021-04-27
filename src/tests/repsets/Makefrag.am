@@ -14,8 +14,12 @@ bin_reps_and_sets_SOURCES = \
   obj/src/tests/repsets/main.cpp \
   obj/src/tests/repsets/namespace.cpp \
   $(end)
+$(scold_cxxdir)/tests/repsets/dependencies.mk: $(bin_reps_and_sets_SOURCES)
+$(bin_reps_and_sets_SOURCES) : obj/src/%.cpp : src/%.xcpp
+	$(TF_V_DIS) $(call TF_XCPP2CPP, $^)
+	$(TF_V_DONE) test -e $@
 $(scold_cxxdir)/tests/repsets/dependencies.mk:
-	$(TF_V_DIS) $(call TF_DISAGGREGATE, $(bin_reps_and_sets_SOURCES))
+	$(TF_V_DEP) $(call TF_DEPENDENCIES, $^)
 	$(TF_V_DONE) test -e $@
 include $(scold_cxxdir)/tests/repsets/dependencies.mk
 clean-dependencies::

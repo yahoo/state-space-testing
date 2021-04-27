@@ -25,8 +25,12 @@ bin_full_of_gravel_SOURCES = \
   obj/src/tests/gravel/range.count.cpp \
   obj/src/tests/gravel/required.Integral.cpp \
   $(end)
+$(scold_cxxdir)/tests/gravel/dependencies.mk: $(bin_full_of_gravel_SOURCES)
+$(bin_full_of_gravel_SOURCES) : obj/src/%.cpp : src/%.xcpp
+	$(TF_V_DIS) $(call TF_XCPP2CPP, $^)
+	$(TF_V_DONE) test -e $@
 $(scold_cxxdir)/tests/gravel/dependencies.mk:
-	$(TF_V_DIS) $(call TF_DISAGGREGATE, $(bin_full_of_gravel_SOURCES))
+	$(TF_V_DEP) $(call TF_DEPENDENCIES, $^)
 	$(TF_V_DONE) test -e $@
 include $(scold_cxxdir)/tests/gravel/dependencies.mk
 clean-dependencies::

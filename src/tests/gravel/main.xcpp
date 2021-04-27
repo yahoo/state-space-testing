@@ -147,7 +147,7 @@ namespace tests::gravel {
     }
     if (errors_seen) {
       notice(cfg) << "there were configuration errors\n";
-      return sys::exits::CONFIG;
+      return sys::exits::CONFIGURATION;
     }
     perform(cfg, cfg.context, *cfg.maximum_record_size, *cfg.record_count);
     return sys::exits::OK;

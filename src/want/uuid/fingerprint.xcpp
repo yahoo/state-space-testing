@@ -3,7 +3,7 @@
 // Licensed under the terms of the Apache-2.0 license. See LICENSE file in https://github.com/yahoo/state-space-testing/blob/master/LICENSE for terms.
 #divert <hpp>
 #import rabinpoly.Fingerprint
-#forward uuid.Container
+#import uuid.Container
 namespace want::uuid {
   //
   // Compute the rabin polynomial hash of a UUID.

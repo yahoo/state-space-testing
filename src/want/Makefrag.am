@@ -18,8 +18,12 @@ lib_libwant_la_SOURCES = \
   obj/src/want/uuid/namespace.cpp \
   obj/src/want/uuid/fingerprint.cpp \
   $(end)
+$(scold_cxxdir)/want/dependencies.mk: $(lib_libwant_la_SOURCES)
+$(lib_libwant_la_SOURCES) : obj/src/%.cpp : src/%.xcpp
+	$(TF_V_DIS) $(call TF_XCPP2CPP, $^)
+	$(TF_V_DONE) test -e $@
 $(scold_cxxdir)/want/dependencies.mk:
-	$(TF_V_DC) $(call TF_DISAGGREGATE, $(lib_libwant_la_SOURCES))
+	$(TF_V_DEP) $(call TF_DEPENDENCIES, $^)
 	$(TF_V_DONE) test -e $@
 include $(scold_cxxdir)/want/dependencies.mk
 clean-dependencies::
