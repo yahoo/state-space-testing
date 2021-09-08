@@ -14,18 +14,18 @@ can be found at the following locations:
 
 A summary overview is as follows:
 * IAB [PrivacyChain](https://github.com/InteractiveAdvertisingBureau/PrivacyChain), contains
-** Specification Documents
-** Runbooks, Operation Documents
-** Project Governance Documents
-** Reference Design
+    * Specification Documents
+    * Runbooks, Operation Documents
+    * Project Governance Documents
+    * Reference Design
 * State Space reference implementation of the IAB PrivacyChain Technology Specification
-** [Packaging](https://github.com/yahoo/state-space-packaging), the packaging, the top-level repository.
-** [Apanolio](https://github.com/yahoo/tunitas-apanolio), a "Northside" API Service, as a macroservice, in [Apache HTTPd](https://httpd.apache.org/).
-** [Montara](https://github.com/yahoo/tunitas-montara), a "Northside" API Service, as a microservice.
-** [Tooling](https://github.com/yahoo/state-space-tooling), some operability tooling.
-** [Testing](https://github.com/yahoo/state-space-testing), some testing and performance assessments.
-** [PrivacyChain C++](https://github.com/yahoo/PrivacyChain-sdk-cxx), part of the "Southside" service components.
-** [Hyperledger Fabric C++](https://github.com/yahoo/hyperledger-fabric-sdk-cxx), part of the "Southside" service components.
+    * [Packaging](https://github.com/yahoo/state-space-packaging), the packaging, the top-level repository.
+    * [Apanolio](https://github.com/yahoo/tunitas-apanolio), a "Northside" API Service, as a macroservice, in [Apache HTTPd](https://httpd.apache.org/).
+    * [Montara](https://github.com/yahoo/tunitas-montara), a "Northside" API Service, as a microservice.
+    * [Tooling](https://github.com/yahoo/state-space-tooling), some operability tooling.
+    * [Testing](https://github.com/yahoo/state-space-testing), some testing and performance assessments.
+    * [PrivacyChain C++](https://github.com/yahoo/PrivacyChain-sdk-cxx), part of the "Southside" service components.
+    * [Hyperledger Fabric C++](https://github.com/yahoo/hyperledger-fabric-sdk-cxx), part of the "Southside" service components.
 * [Hyperledger Fabric](https://github.com/hyperledger/fabric), the upstream.
 
 ## Table of Contents
@@ -48,7 +48,7 @@ This project contains several sorts of tests for the PrivacyChain database manag
 * high-load stress tests
 * operability and recoverabilty tests
 
-Not all of these test scenarios are implemented in the 0.1 release.
+Not all of these test scenarios are implemented in any of the "oh point" releases; <em>e.g.</em> v0.1.
 
 ## Dependencies
 
@@ -57,14 +57,14 @@ The [configuration](#configuration) step will check for many but not all require
 Generally, the dependencies are among:
 - The Hyperledger Fabric database and its Public Key Infrastructure (PKI) services.
 - Various components of the Tunitas system; <em>e.g.</em> the [Basic Components](https://github.com/yahoo/tunitas-basic).
-- A modern (C++2a) development environment.
-- A recent Fedora, but any recent Linux distro should suffice.
+- A modern C++ development environment, meaning C++20 or C++23, C++2b where available.
+- A recent Fedora, <em>e.g.</em>, Fedora 35 will suffice but any recent Linux distro should suffice.
 
-The State Space project was developed on Fedora 27 through Fedora 30 using GCC 7 and GCC 8 with `-fconcepts` and at least `-std=c++1z`.  More details on the development environment and the build system can be found in [temerarious-flagship](https://github.com/yahoo/temerarious-flagship/blob/master/README.md).
+The State Space project was developed on Fedora 27 through Fedora 34 using GCC.  At this juncture, GCC 12 is preferred, though GCC 11 is the minimum requirement.  Because the development started with GCC 7 &amp; GCC 8 using `-fconcepts` and `-std=c++1z`, there are still remnants of older compilers and older versions of C++ throughout the code base..  More details on the expected development environment and the build system can be found in [temerarious-flagship](https://github.com/yahoo/temerarious-flagship/blob/master/README.md).
 
 ## Installation
 
-This project is not independent. It expects to be configured as a submodule of [State Space](https://github.com/yahoo/state-space).  This should happen naturally in the course of the git submodule activation procedure.
+This repo is not independent. It expects to be configured as a submodule of [State Space](https://github.com/yahoo/state-space).  This should happen naturally in the course of the git submodule activation procedure. <!-- remove the need for git submodules ... prefer the use of nearby worktrees -->
 
 The [configuration](#configuration) step will check for many but not all required packages and operating system features.  There is a list of known [package-dependencies](https://github.com/yahoo/state-space-testing/blob/master/PACKAGES.md) which you will need to install beyond your base operating system.
 
@@ -86,7 +86,7 @@ The configuration of the repo consists of two steps which must be done once.
 
 The first step performs some crude assessments of the build environment and creates the site-specific `configure'. Of course `configure --help` will explain the build options.  The general options to `configure` are widely [documented](https://www.gnu.org/prep/standards/html_node/Configuration.html).
 
-The `buildconf` component is boilerplate and can be updated from [temerarious-flagship](https://github.com/yahoo/temerarious-flagship/blob/master/bc/template.autotools-buildconf) as needed.  The [Tunitas Build System](https://github.com/yahoo/temerarious-flagship) should be available in `/opt/tunitas` and the template at `/opt/tunitas/share/temerarious-flagship/bc/template.autotools-buildconf`
+The `buildconf` component is boilerplate and can be updated from [temerarious-flagship](https://github.com/yahoo/temerarious-flagship/blob/master/bc/template.autotools-buildconf) as needed.  The [Tunitas Build System](https://github.com/yahoo/temerarious-flagship) is expected to be available in `/opt/tunitas`. There is a template `buildconf` located at `/opt/tunitas/share/temerarious-flagship/bc/template.autotools-buildconf`
 
 ## Build
 
@@ -104,9 +104,9 @@ echo OK DONE
 ## Usage
 
 Each individual test case will have a statement of purpose and instructions describing how to run it.
-Again, a reminder: these are stress tests which populate the database on their own terms.  They should be used wisely and on on test databases (test channels) only. They should not be applied to the production database.
+Again, a reminder: these are stress tests which populate the database on their own terms.  They should be used wisely and on non-production databases (test channels) only. They should not be applied to a production database.
 
-The command line tools produced in the build process each have their own `--help` options and an associated manual page which is created by `help2man`.  For example the tool privacy chain database query tool `pct` has `pct --help`.
+The command line tools produced in the build process each have their own `--help` options and an associated documentation.  These are frequently is maintaned through the use of `help2man`.  For example the tool privacy chain database query tool `pct` is self-explanatory via `pct --help`.
 
 ### Full of Gravel
 
@@ -122,13 +122,13 @@ Use `reps-and-sets --help`
 
 ## Security
 
-This repo offers testing in support of the State Space reference implementation of the IAB PrivacyChain Technology Specification. As such, this project does not have any direct security concerns.  The tools produced by this project provide the means to interact with the PrivacyChain database.  For those having access to the database replicas directly, access to these tools will allow individuals to manipulate the database structures (the ledger) directly.  Care should be taken to provide such access only to the appropriate operational roles (presenting as persons).
+This repo offers testing in support of the State Space reference implementation of the IAB PrivacyChain Technology Specification. As such, this project does not have any direct security concerns.  The tools produced by this project provide the means to interact with the PrivacyChain database.  For those having access to the database replicas directly, access to these tools will allow individuals to manipulate the database structures directly.  Care should be taken to provide such access only to the appropriate operational roles (presenting as persons).
 
 Please refer to the overall [Security Notice](https://github.com/yahoo/state-space-packaging/blob/master/README.md#Security) in the [lead repo](https://github.com/yahoo/state-space-packaging) of the State Space Project.
 
 ## Contribute
 
-Please refer to [the contributing.md file](Contributing.md) for information about how to get involved. We welcome issues, questions, and pull requests. Pull Requests are welcome.
+Please refer to the [contribution instructions](Contributing.md) for information about how to get involved. We welcome issues, questions. Pull Requests are welcome.
 
 ## Maintainers
 - Wendell Baker <wbaker@verizonmedia.com>

@@ -41,6 +41,10 @@
 # /opt/hyperledger/fabric - The Hyperledger Fabric "with" variables default.
 # /opt/iab/privacychain   - The IAB PrivacyChain "with" variables default.
 #
+# Wut, now?  this is supposed to be simpler than the recipe it replaces?  lol.
+# You only need all this if you are doing development in repo sprawl, ideally located in /build on your own box.
+# You don't need all this if you're doing the "default installation" into /opt
+#
 cd ${0%/*}/.. || exit 70
 : ${prefix:=/exp/iab/privacychain}
 : ${with_siblings:=${PWD%/*}}
@@ -110,7 +114,15 @@ if [[ -d ${with_scold_nearby?}/module-shell ]] ; then : ${with_module_shell:=${w
 : ${with_module_sys:=${with_scold_nearby?}/module-sys}
 : ${with_module_uuid:=${with_scold_nearby?}/module-uuid}
 : ${with_state_space_fabric_sdk:=${with_siblings?}/fabric-sdk-c++}
-: ${with_state_space_privacychain_sdk:=${with_siblings?}/PrivacyChain-sdk-c++}
+{
+    for newer_name in {pc,privacychain,PrivacyChain}-sdk-c++ ; do
+        newer_place="${with_siblings?}/$newer_name"
+        if [[ -d $newer_place ]] ; then
+            : ${with_state_space_privacychain_sdk:=${newer_place?}}
+        fi
+    done
+    : ${with_state_space_privacychain_sdk:=${with_siblings?}/pc-sdk-c++}
+}
 : ${with_state_space_tooling:=${with_siblings?}/tooling}
 : ${with_temerarious_flagship:=${with_tunitas_nearby?}/temerarious-flagship}
 : ${with_tunitas_basics:=${with_tunitas_nearby?}/basics}
