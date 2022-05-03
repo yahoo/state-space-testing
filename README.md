@@ -130,6 +130,7 @@ Please refer to the overall [Security Notice](https://github.com/yahoo/state-spa
 
 Please refer to the [contribution instructions](Contributing.md) for information about how to get involved. We welcome issues, questions. Pull Requests are welcome.
 
+Current work with modern-generation tooling, <em>e.g.</em> circa Fedora 36+ and GCC 12+, is occurring around the <em>v0.1-themed</em> feature branches.
 ## Maintainers
 - Wendell Baker <wbaker@yahooinc.com>
 - The State Space Team at Yahoo <state-space@yahooinc.com>
