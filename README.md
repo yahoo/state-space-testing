@@ -134,7 +134,7 @@ Current work with modern-generation tooling, <em>e.g.</em> circa Fedora 36+ and 
 ## Maintainers
 - Wendell Baker <wbaker@yahooinc.com>
 - The State Space Team at Yahoo <state-space@yahooinc.com>
-- The [IAB PrivacyChain Engineering Working Group](https://iabtechlab.com/working-groups/blockchain-working-group/).
+- <strike>The [IAB PrivacyChain Engineering Working Group](https://iabtechlab.com/working-groups/blockchain-working-group/)</strike> is no longer active.
 
 You may contact us at least at <state-space@yahooinc.com>
 
